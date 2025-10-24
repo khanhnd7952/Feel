@@ -198,6 +198,10 @@ namespace MoreMountains.Feedbacks
 		protected override void CustomInitialization(MMF_Player owner)
 		{
 			base.CustomInitialization(owner);
+			if (RandomSfx == null)
+			{
+				RandomSfx = Array.Empty<AudioClip>();
+			}
 			if ((PlayMethod == PlayMethods.Cached) && (_cachedAudioSource == null))
 			{
 				_cachedAudioSource = CreateAudioSource(owner.gameObject, "CachedFeedbackAudioSource");
@@ -484,6 +488,10 @@ namespace MoreMountains.Feedbacks
 			float volume = Random.Range(MinVolume, MaxVolume);
 			float pitch = Random.Range(MinPitch, MaxPitch);
 			GameObject temporaryAudioHost = new GameObject("EditorTestAS_WillAutoDestroy");
+			if (!Application.isPlaying)
+			{
+				temporaryAudioHost.AddComponent<MMForceDestroyInPlayMode>();
+			}
 			SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, Owner.gameObject.scene);
 			temporaryAudioHost.transform.position = Owner.transform.position;
 			_editorAudioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
